@@ -1,0 +1,27 @@
+{
+    "port": 3002,
+    "nodeId": 2,
+    "server": {
+        "serverNodes": [
+            {
+                "port": 3001,
+                "host": "localhost",
+                "nodeId": 1,
+                "nodeName": "one"
+            }
+        ]
+    },
+    "loadBalancer" : {
+    	"loadBalancerNodes" : [
+    	{
+    		"port": 3000,
+            "host": "localhost",
+            "nodeId": 0,
+            "nodeName": "zero"
+    	}
+    ]
+    },
+    "nodeName": "two",
+    "role": "server",
+    "loadBalanceAlgo" : "roundrobin"
+}

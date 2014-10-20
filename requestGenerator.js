@@ -42,10 +42,10 @@ function createRequestObject(){
 
 window.onload =function()
 {
-	for (i = 0; i < 100; i++) { 
+	for (i = 0; i < 1; i++) { 
     
 		req = createRequestObject();
-		url = "http://localhost:3030/resourceRequest";
+		url = "http://localhost:3000/resourceRequest";
 		params = requestParameterConstruction();
 		req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 		req.onreadystatechange = printFunction();
