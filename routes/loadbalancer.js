@@ -20,13 +20,14 @@ exports.resourceRequest = function(req, res){
 					console.log(err);
 				else
 					{
+					console.log(req.body);
 					console.log(allocatedServer);
 					for(node in conf.server.serverNodes)
 					  {
 					  	var server=conf.server.serverNodes[node];
 					  	if(server.nodeId==allocatedServer)
 					  		{
-					  			url="http://" + server.host + ":" + server.port;
+					  			url="http://" + server.host + ":" + server.port + req.path;
 					  			/**
 					  			 *------- TO DO ---------
 					  			 * 1) Ping the server to see if its running
@@ -34,10 +35,9 @@ exports.resourceRequest = function(req, res){
 					  			 * 3) Call the loadbalancer again to allocate new server
 					  			 *    incase the one allocated is not running
 					  			 */
-					  			console.log(url+req.path);
-					  			res.set('Content-Type', 'text/plain');
+					  			console.log(url);
 					  			res.location(url);
-					  			return res.redirect(307, url + req.path);
+					  			return res.redirect(307, url);
 					  		}
 					  }
 					}
@@ -45,6 +45,7 @@ exports.resourceRequest = function(req, res){
 		  }
 	  else if (conf.role== "server")
 		  {
+		  	console.log('role : server');
 		  if(req.body.hasOwnProperty('quantity') && req.body.hasOwnProperty('duration') && req.body.hasOwnProperty('mobile_os') && req.body.hasOwnProperty('ram') && req.body.hasOwnProperty('disk') && req.body.hasOwnProperty('CPU')) 
 		  	{
 			  /**
@@ -64,11 +65,12 @@ exports.resourceRequest = function(req, res){
 				console.log("\n\n **##### TOTAL COMPUTED COST -->> $50.00  #####**");
 				return res.send('Total Cost $50 undi, Chala expensive undi');
 			}
+		  else
+		  	{
+		  		console.log('Has no parameters');
+		  		console.log(req.body);
+		  		return res.send('No post parameters undi');
+		  	}
 		  }
-	  	else
-	  	{
-	  		console.log(req.body.CPU);
-	  		
-	  	}
 	};
 
