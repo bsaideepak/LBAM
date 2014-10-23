@@ -7,7 +7,7 @@ var url;
 
 function requestParameterConstruction(){
 
-	var quantity = Math.floor((Math.random() * 10) + 1;
+	var quantity = Math.floor((Math.random() * 10) + 1};
 	var duration = Math.floor((Math.random() * 10) + 1);
 	var randInt = Math.floor((Math.random() * 10) + 1);
 	var os_choice = ["android 4.0.0","android 4.0.4","android 4.1.1","android 4.1.2","android 4.1.3","android 4.1.4","android 4.1.5","android 4.2.2","android 4.2.4","android 4.3.4"];

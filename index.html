@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<script>
+
+var req;
+var params;
+var url;
+
+function randomizedRequestParameterConstruction(){
+
+  var quantity = Math.floor((Math.random() * 10) + 1);
+  (document.getElementById('quantity').value) = quantity;
+
+  var duration = Math.floor((Math.random() * 10) + 1);
+  (document.getElementById('duration').value) = duration;
+  
+
+  var randInt = Math.floor((Math.random() * 10));
+
+  var os_choice = ["Android 4.0.0","Android 4.0.4","Android 4.1.1","Android 4.1.2","Android 4.1.3","Android 4.1.4","Android 4.1.5","Android 4.2.2","Android 4.2.4","Android 4.3.4"];
+  var mobile_os = os_choice[randInt];
+  
+
+  (document.getElementById('mobile_os').value) = mobile_os;
+  
+  var ram_choice = ["256","512","1024","2048","4096"];
+  
+  var ram = ram_choice[Math.floor((Math.random() * 4))];
+  
+
+  (document.getElementById('ram').value) = ram;
+
+  var disk_choice = ["256","1024","2048","4096","8192"];
+  var disk = disk_choice[Math.floor((Math.random() * 4))];
+  (document.getElementById('disk').value) = disk;
+  
+  var CPU_choice = ["Single 2GHz","Single 3GHz","Dual 1.2 GHz","Dual 1.4 GHz","Quad 1.2 GHz"];
+  var CPU = CPU_choice[Math.floor((Math.random() * 4))];
+  (document.getElementById('CPU').value) = CPU;
+
+  var args = "quantity="+quantity+"&duration="+duration+"&mobile_os="+mobile_os+" &ram="+ram+"&disk="+disk+"&CPU="+CPU;
+
+  return args;
+
+}
+
+
+function createRequestObject(){
+
+  if (window.XMLHttpRequest) 
+  {
+    return new XMLHttpRequest();
+  } 
+  else 
+  {
+    if (window.ActiveXObject) 
+    {
+      return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+  }
+}
+
+
+
+function sendAJAX()
+{
+  //for (i = 0; i < 100; i++) { 
+    alert('function called');
+    req = createRequestObject();
+    alert('request obj created:' + req);
+    url = "http://localhost:3000/resourceRequest";
+    params = randomizedRequestParameterConstruction();
+    alert(params);
+    //req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    //req.onreadystatechange = printFunction();
+    req.open("POST",url,true);
+    req.send(params);
+  //}
+
+
+}
+
+function printFunction(){}
+
+
+
+</script>
+
+
+
+
+  <meta charset="UTF-8">
+
+  <title>FORM</title>
+
+    <link rel="stylesheet" href="./style.css" media="screen" type="text/css" />
+
+</head>
+
+<body>
+
+  <div class="form281-wrap">
+  <h2>Request Generator</h2>
+
+  <div class="form">
+  <form type="form" method="POST" action="http://localhost:3000/resourceRequest">
+
+  <select class="form" id='CPU' name="CPU">
+                <option>Select CPU</option>
+                <option>Single 2GHz</option>
+                <option>Single 3GHz</option>
+                <option>Dual 1.2 GHz</option>
+                <option>Dual 1.4 GHz</option>
+                <option>Quad 1.2 GHz</option>
+  </select>
+              
+  <select class="form" id='mobile_os' name="mobile_os">
+                <option>Select OS</option>
+                <option>Android 4.0.0</option>
+                <option>Android 4.0.4</option>
+                <option>Android 4.1.1</option>
+                <option>Android 4.1.2</option>
+                <option>Android 4.1.3</option>
+                <option>Android 4.1.4</option>
+                <option>Android 4.1.5</option>
+                <option>Android 4.2.2</option>
+                <option>Android 4.2.4</option>
+                <option>Android 4.3.4</option>
+  </select>
+              
+  <select class="form" id='ram' name="ram">
+                <option>Select RAM</option>
+                <option>256</option>
+                <option>512</option>
+                <option>1024</option>
+                <option>2048</option>
+                <option>4096</option>
+  </select>
+  
+  <select class="form" id='disk' name="disk">
+                <option>Select Disk</option>
+                <option>256</option>
+                <option>1024</option>
+                <option>2048</option>
+                <option>4096</option>
+                <option>8192</option>
+  </select>
+              
+
+   
+ <input type="text" placeholder="No.of Instances" name="quantity" id='quantity'/>
+
+<input type="text" placeholder="Duration" name="duration" id='duration'/>
+  
+   <button type="button" value="Submit" onclick="sendAJAX()">Submit</button>
+<br>
+   <button type="button" value="Randomize Request" onclick="randomizedRequestParameterConstruction()">Randomize Request</button>
+    </form>
+  </div>
+  
+</div>
+   <script src="js/requestGenerator.js"></script>
+
+
+</body>
+
+</html>

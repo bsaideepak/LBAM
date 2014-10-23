@@ -1,0 +1,121 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #95a5a6;
+  background-image: url(http://fc05.deviantart.net/fs71/i/2010/099/7/a/sjsu_wallpaper_by_spader725.jpg);
+    /*background-repeat: no-repeat;
+    background-size: 100%;*/
+  /*http://fc05.deviantart.net/fs71/i/2010/099/7/a/sjsu_wallpaper_by_spader725.jpg*/
+  font-family: 'Helvetica Neue', Arial, Sans-Serif;
+}
+
+html .form281-wrap {
+  position: relative;
+  margin-top: 150px;
+    margin-bottom: 500px;
+    margin-right: 10px;
+    margin-left: 550px;
+  background: #ecf0f1;
+  width: 350px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 10px #333;
+  padding: 15px;
+}
+html .form281-wrap h2 {
+  text-align: center;
+  font-weight: 200;
+  font-size: 1.9em;
+  margin-top: 10px;
+  color: #34495e;
+}
+html .form281-wrap .form {
+  padding-top: 20px;
+}
+
+html .form281-wrap .form select{
+  width: 80%;
+  margin-left: 10%;
+  margin-bottom: 25px;
+  height: 40px;
+  border-radius: 5px;
+  outline: 10;
+  float:left;
+  -moz-outline-style: groove;
+}
+html .form281-wrap .form select, {
+  border: 3px solid #bbb;
+  padding: 0 0 0 10px;
+  font-size: 14px;
+}
+html .form281-wrap .form select:focus{
+  border: 3px solid #3498db;
+}
+
+
+html .form281-wrap .form input[type="text"]{
+  width:80%;
+  margin-left: 10%;
+  margin-bottom: 25px;
+  height: 20px;
+  border-radius: 5px;
+  outline: 0;
+  -moz-outline-style: groove;
+}
+
+html .form281-wrap .form button {
+  width:80%;
+  margin-left: 10%;
+  margin-bottom: 25px;
+  height: 40px;
+  border-radius: 5px;
+  outline: 0;
+  -moz-outline-style: none;
+}
+
+html .form281-wrap .form input[type="text"], {
+  border: 5px solid #bbb;
+  padding: 0 0 0 10px;
+  font-size: 14px;
+}
+html .form281-wrap .form input[type="text"]:focus{
+  border: 1px solid #3498db;
+}
+html .form281-wrap .form a {
+  text-align: center;
+  font-size: 10px;
+  color: #3498db;
+}
+html .form281-wrap .form a p {
+  padding-bottom: 10px;
+}
+html .form281-wrap .form button {
+  background: #ff3333;
+  border: none;
+  color: white;
+  font-size: 18px;
+  font-weight: 200;
+  cursor: pointer;
+  transition: box-shadow .4s ease;
+}
+html .form281-wrap .form button:hover {
+  box-shadow: 1px 1px 5px #880000;
+}
+html .form281-wrap .form button:active {
+  box-shadow: 1px 1px 7px #222;
+}
+html .form281-wrap:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: -webkit-linear-gradient(left, #27ae60 0%, #27ae60 20%, #8e44ad 20%, #8e44ad 40%, #3498db 40%, #3498db 60%, #e74c3c 60%, #e74c3c 80%, #f1c40f 80%, #f1c40f 100%);
+  background: -moz-linear-gradient(left, #27ae60 0%, #27ae60 20%, #8e44ad 20%, #8e44ad 40%, #3498db 40%, #3498db 60%, #e74c3c 60%, #e74c3c 80%, #f1c40f 80%, #f1c40f 100%);
+  height: 5px;
+  border-radius: 5px 5px 0 0;
+}
+/*27ae60*/
