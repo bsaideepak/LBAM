@@ -40,21 +40,20 @@ function allocateServer(callback,conf)
 									temp_minLiveReq = no_of_requests[i];
 									choice = docs[i].serverId;
 								}
-
-
 							};
-
 						}
+
 						serverPointer = choice;
 								
 						callback(serverPointer,null);
 					}
-					else
-					{
+
+					else{
+						
 						callback(null,new Error("No Servers found to handle Requests"));
 					}
 				
-					});
+				});
 					
 				}
 				
