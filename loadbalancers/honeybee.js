@@ -25,19 +25,19 @@ function allocateServer(callback,conf)
 
 					if(!docs.length==0)
 					{
-						var nreq = [];
+						var no_of_requests = [];
 						var choice = docs[0].serverId;
 						var temp_minLiveReq = docs[0].liveReq;
 
 						for(var i=0; i<docs.length;i++)
 						{
-							nreq[i] = docs[i].liveReq;
+							no_of_requests[i] = docs[i].liveReq;
 
 							if (i>0) {
 
-								if (nreq[i]<nreq[i-1]) {
+								if (no_of_requests[i]<no_of_requests[i-1]) {
 
-									temp_minLiveReq = nreq[i];
+									temp_minLiveReq = no_of_requests[i];
 									choice = docs[i].serverId;
 								}
 
@@ -45,8 +45,9 @@ function allocateServer(callback,conf)
 							};
 
 						}
+						serverPointer = choice;
 								
-						callback(choice,null);
+						callback(serverPointer,null);
 					}
 					else
 					{
@@ -62,3 +63,4 @@ function allocateServer(callback,conf)
 	}
 }
 
+exports.allocateServer = allocateServer;
