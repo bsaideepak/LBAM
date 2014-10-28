@@ -17,7 +17,7 @@ function insertServerDetails(callback,json){
 			{	
 				db.collection("servers", function (err, connection){
 
-					connection.insert({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq},function (err,result){
+					connection.insert({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq, 'resourceCount': json.resourceCount},function (err,result){
 						if(err){
 							console.log(err);
 							db.close();
@@ -55,7 +55,7 @@ function updateServerDetails(json){
 			{	
 				db.collection("servers", function (err, connection){
 					
-					connection.save({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq},function (err,result){
+					connection.save({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq, 'resourceCount': json.resourceCount},function (err,result){
 						if(err){
 							console.log(err);
 							db.close();
@@ -92,7 +92,7 @@ function removeServerDetails(json){
 			{
 				db.collection("servers", function (err, connection){
 
-					connection.remove({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq},function (err,result){
+					connection.remove({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq, 'resourceCount': json.resourceCount},function (err,result){
 						if(err){
 							console.log(err);
 							db.close();
