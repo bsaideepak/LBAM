@@ -10,9 +10,7 @@ function allocateServer(callback,conf)
 {
 	if (!conf.server.serverNodes.length<=0)
 	{
-		if(serverPointer<conf.server.serverNodes.length)
-		{
-			servers.findAllServers(function(err,result){
+		servers.findAllServers(function(err,result){
 				
 			if(err){
 				console.log("Error.");
@@ -26,21 +24,32 @@ function allocateServer(callback,conf)
 					if(!docs.length==0)
 					{
 						var no_of_requests = [];
-						var choice = docs[0].serverId;
-						var temp_minLiveReq = docs[0].liveReq;
+						var serverId_list = [];
+						var resourceCount_list = [];
 
+						if(docs[0].resourceCount > 0){
+							var choice = docs[0].serverId;
+						}
+
+						
 						for(var i=0; i<docs.length;i++)
 						{
 							no_of_requests[i] = docs[i].liveReq;
+							serverId[i] = docs[i].serverId;
+
+							if(docs[i].resourceCount > 0){
+								resourceCount_list[i] = 1;
+							}
+
 
 							if (i>0) {
 
-								if (no_of_requests[i]<no_of_requests[i-1]) {
+								if (no_of_requests[i]<no_of_requests[i-1] && resourceCount_list[i]==1) {
 
-									temp_minLiveReq = no_of_requests[i];
-									choice = docs[i].serverId;
+									choice = serverId_list[i];
 								}
-							};
+							}
+							
 						}
 
 						serverPointer = choice;
@@ -58,7 +67,7 @@ function allocateServer(callback,conf)
 				}
 				
 			});
-		}
+		
 	}
 }
 
