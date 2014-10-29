@@ -1,15 +1,17 @@
 var MongoClient = require('mongodb').MongoClient;
+var fs = require("fs");
 var conf = (JSON.parse(fs.readFileSync("./config/conf.json", "utf8")));
 
-function getConnection(){
+function getConnection(callback){
 
-	MongoClient.connect(conf.mongodbURI, function(err, db) {
+	MongoClient.connect(conf.mongodbURI, {native_parser:true}, function(err, db) {
 
 		if(err){
 			console.log("Error Connection to DB: " + err );
-		}
+		}	
 		else{
-			return db;
+			console.log("Connected to DB");
+			callback(null,db);
 		}
 
 	});
@@ -248,8 +250,7 @@ function createWorkerServers(conf){
 	for(node in conf.server.serverNodes)
 	 {
 	  	var server=conf.server.serverNodes[node];
-	  	console.log("Server " + server.nodeName + " for handling requests at port " + server.port );
-
+	  	
 	  	if(server.nodeName && server.nodeId && server.resourceCount ){
 
 			db = getConnection();
@@ -292,4 +293,52 @@ function createWorkerServers(conf){
 }
 
 exports.createWorkerServers = createWorkerServers;
+
+function checkCollectionEmpty(callback,colName)
+{
+	getConnection(function(err,db){
+		if(err)
+			console.log(err);
+		else
+			{
+			console.log("DB object acquired");
+			db.collection(colName, function (err, collection){
+
+				if(!err)
+				{
+					console.log("collection acquired");
+					collection.count(function (err, count) {
+						if(err)
+							{
+								console.log(err);
+								closeConnection(db);
+								callback(err,null);
+							}
+						else{
+							if(count === 0) {
+						        console.log("count working");
+						        closeConnection(db);
+						        callback(null,true);
+						    }
+							else
+								{
+									console.log("servers not null");
+									closeConnection(db);
+									callback(null,false);
+								}
+						}
+					});
+				}
+				else
+				{
+					console.log("Database Collection Error.");
+					closeConnection(db);
+				}
+				});
+
+			}
+	});
+}
+
+exports.checkCollectionEmpty = checkCollectionEmpty;
 

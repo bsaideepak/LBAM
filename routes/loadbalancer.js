@@ -59,6 +59,11 @@ exports.resourceRequest = function(req, res){
 				  }
 				  incrementPheromoneBySid(conf.nodeId,prize);
 			  }
+			  if(conf.loadBalanceAlgo=="honeybee")
+			  {
+				  decrementLiveReqCount(conf.nodeId);
+			  }
+			  
 			  /**
 	  			 *------- TO DO ---------
 	  			 * 1) Each parameter has an associated cost

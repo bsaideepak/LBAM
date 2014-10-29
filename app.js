@@ -9,6 +9,7 @@ var loadbalancer = require("./routes/loadbalancer");
 var http = require('http');
 var path = require('path');
 var fs = require("fs");
+var commonDb=require("./util/common.js");
 
 /**
  * -------TO DO----------- 
@@ -69,4 +70,20 @@ http.createServer(app).listen(app.get('port'), function(){
   	console.log("LoadBalancer " + loadBalancer.nodeName + " for balancing request load at port " + loadBalancer.port );
   }
   console.log("Implementing the " + conf.loadBalanceAlgo + " algorithm for Load Balancing");
+  commonDb.checkCollectionEmpty(function(err,empty){
+	  if(err)
+		  console.log(err);
+	  else
+		  {
+		  	if(empty==true)
+		  		{
+		  			console.log("collection servers empty");
+		  		}
+		  	else
+		  		{
+		  			console.log("collection servers is not empty");
+		  		}
+		  }
+	  
+  },'servers');
 });

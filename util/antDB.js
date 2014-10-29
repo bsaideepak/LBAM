@@ -56,7 +56,7 @@ function getPheromoneCountValue(callback, serverId, quantity){
 
 exports.getPheromoneCountValue = getPheromoneCountValue;
 
-function changePheromoneCountValue(serverId,){
+function changePheromoneCountValue(serverId){
 
 	db.collection("servers", function (err, connection){
 
