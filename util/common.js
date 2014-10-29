@@ -118,34 +118,60 @@ function findAvailableServersWithResources(callback,conf,quantity){
 	var liveServers = [];
 	var liveReqCount = [];
 	var availableLiveServersString;
-		
+	var flag = 0;
+
 	db.collection("servers", function (err, connection){
 
-		if(!err){
+		if(!err)
+		{
 			
 			//query for resource availability when finding all servers.
 
-			connection.find({'resourceCount': { $gt : quantity } },function(err,res){
+			connection.find({'resourceCount': { $gt : quantity } },function(err,res)
+			{
+				if(err)
+				{
+					console.log(err);
+					closeConnection(db);
+					callback(err,null);
+				}
 
 				//Check server entries in config and match against database results.
-				res.toArray(function(err,docs){
+				res.toArray(function(err,docs)
+				{
+					if(err)
+					{
+						console.log(err);
+						closeConnection(db);
+						callback(err,null);
+					}
 					
 					if(!docs.length==0)
 					{
-						if(conf.server.serverNodes.length!=0){
+						if(conf.server.serverNodes.length!=0)
+						{
 						
 							for(var i=0; i<docs.length; i++)
 							{
 								var temp = docs[i].serverId;
 
-								for(var j = 0; j < conf.server.serverNodes.length; j++){
+								for(var j = 0; j < conf.server.serverNodes.length; j++)
+								{
 
-									if(temp == conf.server.serverNodes[j].nodeId){
+									if(temp == conf.server.serverNodes[j].nodeId)
+									{
+
+										flag = 1;
 
 										//liveServers[i] = conf.server.serverNodes[j].nodeId;
-										availableLiveServersString = availableLiveServersString + docs[i].serverId + "," + docs[i].liveReq + "#";
+										//availableLiveServersString = availableLiveServersString + docs[i].serverId + "," + docs[i].liveReq + "#";
 
 									}
+								}
+								if(flag!= 1){
+									
+									docs.splice(i,1);
+									flag=0;
 								}
 							}	
 						}
@@ -153,12 +179,14 @@ function findAvailableServersWithResources(callback,conf,quantity){
 							console.log("No Server Up and Running.");
 							availableLiveServersString = "";
 							closeConnection(db);
+							callback(new Error("No Server Up and Running."),null);
 						}
 					}
 					else{
 						console.log("No Servers In Database.");
 						availableLiveServersString = "";
 						closeConnection(db);
+						callback(new Error("No Servers In Database."),null);
 					}
 
 					closeConnection(db);
@@ -171,6 +199,7 @@ function findAvailableServersWithResources(callback,conf,quantity){
 
 			console.log("Error Connecting to Database.");
 			closeConnection(db);
+			callback(err,null);
 
 		}
 	});
