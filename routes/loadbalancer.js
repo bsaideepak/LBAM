@@ -5,7 +5,8 @@
 
 var fs = require("fs");
 var conf = (JSON.parse(fs.readFileSync("./config/conf.json", "utf8")));
-var roundrobin = require("../loadbalancers/RoundRobin");
+var loadBal=conf.loadBalanceAlgo;
+var algo = require("../loadbalancers/"+loadBal);
 
 
 exports.ping = function(req, res){
@@ -15,7 +16,7 @@ exports.ping = function(req, res){
 exports.resourceRequest = function(req, res){
 	  if(conf.role == "loadbalancer")
 		  {
-		  	roundrobin.allocateServer(function(allocatedServer,err){
+		  	algo.allocateServer(function(allocatedServer,err){
 		  		if(err)
 					console.log(err);
 				else
@@ -41,13 +42,23 @@ exports.resourceRequest = function(req, res){
 					  		}
 					  }
 					}
-		  	},conf);
+		  	},conf,req);
 		  }
 	  else if (conf.role== "server")
 		  {
 		  	console.log('role : server');
-		  if(req.body.hasOwnProperty('quantity') && req.body.hasOwnProperty('duration') && req.body.hasOwnProperty('mobile_os') && req.body.hasOwnProperty('ram') && req.body.hasOwnProperty('disk') && req.body.hasOwnProperty('CPU')) 
+		  	if(req.body.hasOwnProperty('quantity') && req.body.hasOwnProperty('duration') && req.body.hasOwnProperty('mobile_os') && req.body.hasOwnProperty('ram') && req.body.hasOwnProperty('disk') && req.body.hasOwnProperty('CPU')) 
 		  	{
+			  if(conf.loadBalanceAlgo=="ant")
+			  {
+				  var slength=conf.server.serverNodes.length;
+				  var prize=function random(slength) 
+				  {
+					  var x = Math.cos(slength) * 10000;
+					  return x - Math.floor(x);
+				  }
+				  incrementPheromoneBySid(conf.nodeId,prize);
+			  }
 			  /**
 	  			 *------- TO DO ---------
 	  			 * 1) Each parameter has an associated cost
@@ -62,8 +73,12 @@ exports.resourceRequest = function(req, res){
 				console.log("** MOBILE OS --> " + req.body.mobile_os  + "**");
 				console.log("** DURATION --> " + req.body.duration  + "**");
 				console.log("** QUANTITY --> " + req.body.quantity  + "**");
+				console.log("** LATITUDE --> " + req.body.latitude  + "**");
+				console.log("** LONGITUDE --> " + req.body.longitude  + "**");
+				
 				console.log("\n\n **##### TOTAL COMPUTED COST -->> $50.00  #####**");
 				return res.send('Total Cost $50 undi, Chala expensive undi');
+				
 			}
 		  else
 		  	{

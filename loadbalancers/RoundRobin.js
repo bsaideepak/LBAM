@@ -4,7 +4,7 @@
  */
 var serverPointer=0;
 
-function allocateServer(callback,conf)
+function allocateServer(callback,conf,req)
 {
 	if (!conf.server.serverNodes.length<=0)
 	{

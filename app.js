@@ -17,6 +17,14 @@ var fs = require("fs");
  * 2) Validate JSON FILE. 
  * 
  */
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,POST');
+    res.header('Access-Control-Allow-Headers', '*');
+
+    next();
+}
+
 var conf = (JSON.parse(fs.readFileSync("./config/conf.json", "utf8")));
 
 var app = express();
@@ -31,6 +39,7 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(allowCrossDomain);
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
