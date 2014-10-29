@@ -6,7 +6,7 @@ var common = require("../util/common");
 var db;
 
 
-function incrementLiveReqCount(callback,serverId){
+function incrementLiveReqCount(serverId){
 
 	db.collection("servers", function (err, connection){
 
@@ -35,7 +35,7 @@ exports.incrementLiveReqCount = incrementLiveReqCount;
 
 
 
-function decrementLiveReqCount(callback,serverId){
+function decrementLiveReqCount(serverId){
 
 	db.collection("servers", function (err, connection){
 

@@ -1,8 +1,9 @@
 var MongoClient = require('mongodb').MongoClient;
+var conf = (JSON.parse(fs.readFileSync("./config/conf.json", "utf8")));
 
 function getConnection(){
 
-	MongoClient.connect('mongodb://127.0.0.1:27017/ldb', function(err, db) {
+	MongoClient.connect(conf.mongodbURI, function(err, db) {
 
 		if(err){
 			console.log("Error Connection to DB: " + err );
@@ -190,7 +191,7 @@ function findAvailableServersWithResources(callback,conf,quantity){
 					}
 
 					closeConnection(db);
-					callback(err,availableLiveServersString);
+					callback(err,docs);
 				});
 			});
 		}
