@@ -258,7 +258,7 @@ function createWorkerServers(conf){
 
 				if(!err){
 
-					connection.insert({'serverName':server.nodeName,'serverId':server.nodeId, 'liveReq': "0", 'resourceCount': server.resourceCount},function (err,result){
+					connection.insert({'serverName':server.nodeName,'serverId':server.nodeId, 'liveReq': "0", 'resourceCount': server.resourceCount, 'pheromoneCount': "0", "tAvg": "0"},function (err,result){
 			
 					if(err){
 				
