@@ -24,50 +24,6 @@ function closeConnection(db){
 
 exports.closeConnection = closeConnection;
 
-function insertServerDetails(callback,json){
-	
-	if(json.serverName && json.serverId && json.liveReq ){
-
-		db = getConnection();
-		
-		db.collection("servers", function (err, connection){
-
-			if(!err){
-
-				connection.insert({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq, 'resourceCount': json.resourceCount},function (err,result){
-			
-				if(err){
-				
-					console.log(err);
-					closeConnection(db);
-				}
-						
-				else{
-				
-					var status = "Successfully Inserted";
-					closeConnection(db);
-					console.log("Operation Successful.");
-					callback(err,status);
-				}
-			
-				});
-			}
-			else{
-				console.log("Database Collection Error.");
-				closeConnection(db);
-			}
-
-		});
-	}
-	else{
-		console.log("Incomplete JSON.");
-		closeConnection(db);
-	}
-
-}
-
-exports.insertServerDetails = insertServerDetails;
-
 
 function updateServerDetails(json){
 
@@ -178,7 +134,7 @@ function findAvailableServersWithResources(callback,conf,quantity){
 					{
 						if(conf.server.serverNodes.length!=0){
 						
-							for(var i=1; i<docs.length; i++)
+							for(var i=0; i<docs.length; i++)
 							{
 								var temp = docs[i].serverId;
 
@@ -255,3 +211,56 @@ function findServerDetailsById(callback,serverId){
 	});
 }
 exports.findServerDetailsById = findServerDetailsById;
+
+
+function createWorkerServers(callback,conf){
+
+	for(node in conf.server.serverNodes)
+	 {
+	  	var server=conf.server.serverNodes[node];
+	  	console.log("Server " + server.nodeName + " for handling requests at port " + server.port );
+
+	  	if(server.nodeName && server.nodeId && server.resourceCount ){
+
+			db = getConnection();
+		
+			db.collection("servers", function (err, connection){
+
+				if(!err){
+
+					connection.insert({'serverName':server.nodeName,'serverId':server.nodeId, 'liveReq': "0", 'resourceCount': server.resourceCount},function (err,result){
+			
+					if(err){
+				
+						console.log(err);
+						closeConnection(db);
+					}
+						
+					else{
+				
+						var status = "Successfully Inserted";
+						closeConnection(db);
+						console.log("Operation Successful.");
+						callback(err,status);
+					}
+			
+					});
+				}
+				else{
+					console.log("Database Collection Error.");
+					closeConnection(db);
+				}
+
+			});
+		
+		}
+
+		else{
+			console.log("Incomplete JSON.");
+			closeConnection(db);
+		}
+	}
+}
+
+exports.createWorkerServers = createWorkerServers;
+
