@@ -243,7 +243,7 @@ function findServerDetailsById(callback,serverId){
 exports.findServerDetailsById = findServerDetailsById;
 
 
-function createWorkerServers(callback,conf){
+function createWorkerServers(conf){
 
 	for(node in conf.server.serverNodes)
 	 {
@@ -271,7 +271,6 @@ function createWorkerServers(callback,conf){
 						var status = "Successfully Inserted";
 						closeConnection(db);
 						console.log("Operation Successful.");
-						callback(err,status);
 					}
 			
 					});
