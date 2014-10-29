@@ -16,14 +16,17 @@ function incrementLiveReqCount(callback,serverId){
 
 				if(err){
 					console.log("Error WHile Updating.");
+					common.closeConnection(db);
 				}
 				else{
 					console.log("Recorded Updated.");
+					common.closeConnection(db);
 				}
 			});
 		}
 		else{
 			console.log("Error in connection.");
+			common.closeConnection(db);
 		}
 	});
 }
@@ -42,14 +45,17 @@ function decrementLiveReqCount(callback,serverId){
 
 				if(err){
 					console.log("Error WHile Updating.");
+					common.closeConnection(db);
 				}
 				else{
 					console.log("Recorded Updated.");
+					common.closeConnection(db);
 				}
 			});
 		}
 		else{
 			console.log("Error in connection.");
+			common.closeConnection(db);
 		}
 	});
 }

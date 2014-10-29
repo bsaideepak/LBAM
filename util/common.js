@@ -39,13 +39,13 @@ function insertServerDetails(callback,json){
 				if(err){
 				
 					console.log(err);
-					common.closeConnection(db);
+					closeConnection(db);
 				}
 						
 				else{
 				
 					var status = "Successfully Inserted";
-					common.closeConnection(db);
+					closeConnection(db);
 					console.log("Operation Successful.");
 					callback(err,status);
 				}
@@ -54,12 +54,14 @@ function insertServerDetails(callback,json){
 			}
 			else{
 				console.log("Database Collection Error.");
+				closeConnection(db);
 			}
 
 		});
 	}
 	else{
 		console.log("Incomplete JSON.");
+		closeConnection(db);
 	}
 
 }
@@ -82,13 +84,13 @@ function updateServerDetails(json){
 				if(err){
 				
 					console.log(err);
-					common.closeConnection(db);
+					closeConnection(db);
 				}
 						
 				else{
 				
 					var status = "Successfully Inserted";
-					common.closeConnection(db);
+					closeConnection(db);
 					console.log("Operation Successful.");
 					callback(err,status);
 				}
@@ -97,12 +99,14 @@ function updateServerDetails(json){
 			}
 			else{
 				console.log("Database Collection Error.");
+				closeConnection(db);
 			}
 
 		});
 	}
 	else{
 		console.log("Incomplete JSON.");
+		closeConnection(db);
 	}
 }
 
@@ -123,13 +127,13 @@ function removeServerDetails(json){
 				if(err){
 				
 					console.log(err);
-					common.closeConnection(db);
+					closeConnection(db);
 				}
 						
 				else{
 				
 					var status = "Successfully Inserted";
-					common.closeConnection(db);
+					closeConnection(db);
 					console.log("Operation Successful.");
 					callback(err,status);
 				}
@@ -138,12 +142,14 @@ function removeServerDetails(json){
 			}
 			else{
 				console.log("Database Collection Error.");
+				closeConnection(db);
 			}
 
 		});
 	}
 	else{
 		console.log("Incomplete JSON.");
+		closeConnection(db);
 	}
 }
 
@@ -163,7 +169,7 @@ function findAvailableServersWithResources(callback,conf,quantity){
 			
 			//query for resource availability when finding all servers.
 
-			connection.find({'resourceCount': { $gt : 0 } },function(err,res){
+			connection.find({'resourceCount': { $gt : quantity } },function(err,res){
 
 				//Check server entries in config and match against database results.
 				res.toArray(function(err,docs){
@@ -190,14 +196,16 @@ function findAvailableServersWithResources(callback,conf,quantity){
 						else{
 							console.log("No Server Up and Running.");
 							availableLiveServersString = "";
+							closeConnection(db);
 						}
 					}
 					else{
 						console.log("No Servers In Database.");
 						availableLiveServersString = "";
+						closeConnection(db);
 					}
 
-					common.closeConnection(db);
+					closeConnection(db);
 					callback(err,availableLiveServersString);
 				});
 			});
@@ -206,6 +214,7 @@ function findAvailableServersWithResources(callback,conf,quantity){
 		else{
 
 			console.log("Error Connecting to Database.");
+			closeConnection(db);
 
 		}
 	});
@@ -227,11 +236,11 @@ function findServerDetailsById(callback,serverId){
 				
 				if(err){
 					console.log("No Server exists.");
-					common.closeConnection(db);
+					closeConnection(db);
 				}
 				
 				else{
-					common.closeConnection(db);
+					closeConnection(db);
 					callback(err,res);
 				}
 			});
@@ -240,6 +249,7 @@ function findServerDetailsById(callback,serverId){
 		else{
 
 			console.log("Collection Error.")
+			closeConnection(db);
 		}
 			
 	});
