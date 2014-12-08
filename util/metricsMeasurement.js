@@ -6,6 +6,7 @@ var common = require("../util/common");
 var db;
 var collectionName = "metricsMeasurement";
 var dbc="hc";
+var mongo = require("../util/MongoDBConnectionPool");
 
 function logT1(callback,json){
 	

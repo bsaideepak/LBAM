@@ -5,6 +5,8 @@
 var common = require("../util/common");
 var db;
 var dbc="hc";
+var mongo = require("../util/MongoDBConnectionPool");
+var collectionName = "servers";
 
 function incrementLiveReqCount(serverId){
 
