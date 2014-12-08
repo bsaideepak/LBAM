@@ -197,7 +197,8 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 	var liveReqCount = [];
 	var availableLiveServersString;
 	var flag = 0;
-
+	var count = 0;
+	
 	mongo.getConnection(function(err,coll){
 			if(err){
 				console.log("Error: "+err);
@@ -211,7 +212,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 
 	if(optimizationParameter == "resource"){
 		
-		dbc.find({'resourceCount': { $gt : quantity } }).sort('resourceCount': -1).limit(3,function(err,result)
+		dbc.find({'resourceCount': { $gt : quantity } }).sort({'resourceCount': -1},function(err,result)
 		{
 			if(err)
 			{
@@ -234,7 +235,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 				{
 					if(conf.server.serverNodes.length!=0)
 					{
-						for(var i=0; i<docs.length; i++)
+						for(var i=0; i<docs.length && count<3; i++)
 						{
 							var temp = docs[i].serverId;
 							for(var j = 0; j < conf.server.serverNodes.length; j++)
@@ -242,6 +243,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 								if(temp == conf.server.serverNodes[j].nodeId)
 								{
 									flag = 1;
+									count++;
 									//liveServers[i] = conf.server.serverNodes[j].nodeId;
 									//availableLiveServersString = availableLiveServersString + docs[i].serverId + "," + docs[i].liveReq + "#";
 								}
@@ -266,7 +268,8 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 					//closeConnection(db);
 					callback(new Error("No Servers In Database."),null);
 				}
-
+				
+				count = 0;
 				//closeConnection(db);
 				callback(err,docs);
 			});
@@ -274,7 +277,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 	}
 	else if(optimizationParameter == "cost"){
 	
-		dbc.find().sort('cost': 1).limit(3,function(err,result)
+		dbc.find('resourceCount': { $gt : quantity }).sort({'cost': 1}, function(err,result)
 		{
 			if(err)
 			{
@@ -297,7 +300,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 				{
 					if(conf.server.serverNodes.length!=0)
 					{
-						for(var i=0; i<docs.length; i++)
+						for(var i=0; i<docs.length && count<3; i++)
 						{
 							var temp = docs[i].serverId;
 							for(var j = 0; j < conf.server.serverNodes.length; j++)
