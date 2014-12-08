@@ -3,12 +3,14 @@
  */
 var closestServer=0;
 var shortestDistance=0;
+var db = require("../util/common");
+var algo = require("../loadbalancers/"+loadBal);
 function allocateServer(callback,conf, req)
 {
 	if(req.body.hasOwnProperty('lattitude') && req.body.hasOwnProperty('longitude'))
 	{
 		var serverList;
-		findAvailableServersWithResources(function (error, servers)
+		db.findAvailableServersWithResources(function (error, servers)
 				{
 			if(error)
 			{
@@ -56,7 +58,38 @@ function allocateServer(callback,conf, req)
 }
 exports.allocateServer = allocateServer;
 
-function performServerTask()
+function performServerTask(conf, req, callback)
+{
+	
+	//decrease server resourceCount
+	db.updateServerResourceCount(conf.nodeId, req.body.quantity);
+	console.log("****** Request For Resource recieved with the following Configuration");
+	console.log("** CPU --> " + req.body.CPU  + "**");
+	console.log("** DISK --> " + req.body.disk  + "**");
+	console.log("** RAM --> " + req.body.ram  + "**");
+	console.log("** MOBILE OS --> " + req.body.mobile_os  + "**");
+	console.log("** DURATION --> " + req.body.duration  + "**");
+	console.log("** QUANTITY --> " + req.body.quantity  + "**");
+	console.log("** LATITUDE --> " + req.body.latitude  + "**");
+	console.log("** LONGITUDE --> " + req.body.longitude  + "**");
+	
+	db.findServerDetailsById(function(err, server)
+			{
+				if (error)
+					{
+						console.log("DB nahi chalta, Error from FindServerDetailsbyID : " + error );
+						callback(new Error("Error from FindServerDetailsbyID"), null);
+					}
+				else
+					{
+						var totalCost= server.cost*req.body.quantity();
+						callback(null,totalCost);
+					}
+			},
+		conf.nodeId);
+	
+}
+exports.performServerTask = performServerTask;
 
 
 

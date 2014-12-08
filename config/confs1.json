@@ -7,7 +7,41 @@
                 "port": 3002,
                 "host": "localhost",
                 "nodeId": 2,
-                "nodeName": "two"
+                "nodeName": "two",
+                "latitude": 43.00,
+                "longitude": -75.00,
+                "resourceCount": 100,
+                "cost":20
+            },
+            {
+                "port": 3003,
+                "host": "localhost",
+                "nodeId": 3,
+                "nodeName": "three",
+                "latitude": 31.40,
+                "longitude": -98.30,
+                "resourceCount": 1000,
+                "cost":30
+            },
+            {
+                "port": 3004,
+                "host": "localhost",
+                "nodeId": 4,
+                "nodeName": "four",
+                "latitude": 47.53,
+                "longitude": -99.79,
+                "resourceCount": 1050,
+                "cost":40
+            },
+            {
+                "port": 3005,
+                "host": "localhost",
+                "nodeId": 5,
+                "nodeName": "five",
+                "latitude": 39.06,
+                "longitude": -105.32,
+                "resourceCount": 800,
+                "cost":50
             }
         ]
     },
@@ -21,7 +55,12 @@
     	}
     ]
     },
+    "latitude": 34.00,
+    "longitude": -112.00,
+    "resourceCount": 100,
+    "mongodbURI" : "mongodb://127.0.0.1:27017/ldb?maxPoolSize=200",
     "nodeName": "one",
     "role": "server",
-    "loadBalanceAlgo" : "roundrobin"
+    "loadBalanceAlgo" : "roundrobin",
+    "cost" : 10
 }

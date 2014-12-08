@@ -1,9 +1,9 @@
 {
-    "port": 3000,
-    "nodeId": 0,
+    "port": 3004,
+    "nodeId": 4,
     "server": {
         "serverNodes": [
-           {
+            {
                 "port": 3001,
                 "host": "localhost",
                 "nodeId": 1,
@@ -12,7 +12,6 @@
                 "longitude": -112.00,
                 "resourceCount": 100,
                 "cost":10
-                	
             },
             {
                 "port": 3002,
@@ -35,16 +34,6 @@
                 "cost":30
             },
             {
-                "port": 3004,
-                "host": "localhost",
-                "nodeId": 4,
-                "nodeName": "four",
-                "latitude": 47.53,
-                "longitude": -99.79,
-                "resourceCount": 1050,
-                "cost":40
-            },
-            {
                 "port": 3005,
                 "host": "localhost",
                 "nodeId": 5,
@@ -58,13 +47,20 @@
     },
     "loadBalancer" : {
     	"loadBalancerNodes" : [
+    	{
+    		"port": 3000,
+            "host": "localhost",
+            "nodeId": 0,
+            "nodeName": "zero"
+    	}
     ]
     },
-    "latitude": 33.47,
-    "longitude": -118.11,
-    "resourceCount": 0,
+    "latitude": 47.53,
+    "longitude": -99.79,
+    "resourceCount": 1050,
     "mongodbURI" : "mongodb://127.0.0.1:27017/ldb?maxPoolSize=200",
-    "nodeName": "zero",
-    "role": "loadbalancer",
-    "loadBalanceAlgo" : "roundrobin"
+    "nodeName": "four",
+    "role": "server",
+    "loadBalanceAlgo" : "roundrobin",
+    "cost" : 40
 }
