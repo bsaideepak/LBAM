@@ -385,7 +385,7 @@ function createWorkerServers(conf){
 				}
 			},collectionName);
 		
-			dbc.insert({'serverName':server.nodeName,'serverId':server.nodeId, 'liveReq': "0", 'resourceCount': server.resourceCount, 'pheromoneCount': "0", "tAvg": "0"},function (err,result){
+			dbc.insert({'serverName':server.nodeName,'serverId':server.nodeId, 'liveReq': "0", 'resourceCount': server.resourceCount, 'pheromoneCount': "0", "tAvg": "0", 'cost': server.cost, 'latitude':server.latitude, 'longitude':server.longitude},function (err,result){
 				if(err){
 					console.log(err);
 					//closeConnection(db);
