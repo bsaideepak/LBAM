@@ -18,10 +18,8 @@ function updateServerDetails(json){
 			}
 			else{
 				dbc = coll;
-			}
-		},collectionName);
-
-		dbc.findAndModify({query: {"serverId": json.serverId },update: { $set: { 'serverName':json.serverName,'liveReq':json.liveReq, 'resourceCount':json.resourceCount, 'serverName': json.serverName } }, upsert: true },function(err,result){
+				
+				dbc.findAndModify({query: {"serverId": json.serverId },update: { $set: { 'serverName':json.serverName,'liveReq':json.liveReq, 'resourceCount':json.resourceCount, 'serverName': json.serverName } }, upsert: true },function(err,result){
 			if(err){
 				console.log(err);
 				//closeConnection(db);
@@ -33,6 +31,8 @@ function updateServerDetails(json){
 				callback(err,status);
 			}
 		});
+			}
+		},collectionName);
 	}
 	else{
 		console.log("Database Collection Error.");
@@ -52,10 +52,8 @@ function updateServerResourceCount(serverId,resourceCount){
 			}
 			else{
 				dbc = coll;
-			}
-		},collectionName);
-
-		dbc.findAndModify({query: {"serverId": serverId },update: { $set: { 'resourceCount':resourceCount } }, upsert: true },function(err,result){
+				
+				dbc.findAndModify({query: {"serverId": serverId },update: { $set: { 'resourceCount':resourceCount } }, upsert: true },function(err,result){
 			if(err){
 				console.log(err);
 				//closeConnection(db);
@@ -67,6 +65,10 @@ function updateServerResourceCount(serverId,resourceCount){
 				//callback(err,status);
 			}
 		});
+				
+			}
+		},collectionName);
+
 	}
 	else{
 		console.log("Database Collection Error.");
@@ -86,10 +88,8 @@ function removeServerDetails(json){
 			}
 			else{
 				dbc = coll;
-			}
-		},collectionName);
-
-		dbc.remove({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq, 'resourceCount': json.resourceCount},function (err,result){
+				
+				dbc.remove({'serverName':json.serverName,'serverId':json.serverId, 'liveReq': json.liveReq, 'resourceCount': json.resourceCount},function (err,result){
 
 			if(err){
 				console.log(err);
@@ -104,6 +104,8 @@ function removeServerDetails(json){
 			}
 
 		});
+			}
+		},collectionName);
 	}
 	else{
 		console.log("Database Collection Error.");
@@ -127,12 +129,7 @@ function findAvailableServersWithResources(callback,conf,quantity){
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-
-	//query for resource availability when finding all servers.
-
-	dbc.find({'resourceCount': { $gt : quantity } },function(err,result)
+			dbc.find({'resourceCount': { $gt : quantity } },function(err,result)
 			{
 		if(err)
 		{
@@ -193,6 +190,12 @@ function findAvailableServersWithResources(callback,conf,quantity){
 			callback(err,docs);
 				});
 			});
+		}
+	},collectionName);
+
+	//query for resource availability when finding all servers.
+
+	
 }
 
 
@@ -213,12 +216,8 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-
-	//query for resource availability when finding all servers.
-
-	if(optimizationParameter == "resource"){
+			
+			if(optimizationParameter == "resource"){
 
 		dbc.find({'resourceCount': { $gt : quantity } }).sort({'resourceCount': -1},function(err,result)
 				{
@@ -429,6 +428,11 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 			});
 		});
 	}
+			
+		}
+	},collectionName);
+
+	//query for resource availability when finding all servers.
 }
 
 
@@ -444,10 +448,7 @@ function findServerDetailsById(callback,serverId){
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-
-	dbc.find({"serverId":serverId},function(err,result){
+			dbc.find({"serverId":serverId},function(err,result){
 
 		if(err){
 			console.log("No Server exists.");
@@ -458,6 +459,10 @@ function findServerDetailsById(callback,serverId){
 			callback(err,result);
 		}
 	});
+		}
+	},collectionName);
+
+	
 }
 exports.findServerDetailsById = findServerDetailsById;
 
@@ -476,10 +481,8 @@ function createWorkerServers(conf){
 				}
 				else{
 					dbc = coll;
-				}
-			},collectionName);
-
-			dbc.insert({'serverName':server.nodeName,'serverId':server.nodeId, 'liveReq': "0", 'resourceCount': server.resourceCount, 'pheromoneCount': "0", "tAvg": "0", 'cost': server.cost, 'latitude':server.latitude, 'longitude':server.longitude},function (err,result){
+					
+					dbc.insert({'serverName':server.nodeName,'serverId':server.nodeId, 'liveReq': "0", 'resourceCount': server.resourceCount, 'pheromoneCount': "0", "tAvg": "0", 'cost': server.cost, 'latitude':server.latitude, 'longitude':server.longitude},function (err,result){
 				if(err){
 					console.log(err);
 					//closeConnection(db);
@@ -492,6 +495,10 @@ function createWorkerServers(conf){
 				}
 
 			});
+				}
+			},collectionName);
+
+			
 		}
 
 		else{
@@ -512,10 +519,7 @@ function checkCollectionEmpty(callback)
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-
-	dbc.count(function (err, count) {
+			dbc.count(function (err, count) {
 
 		if(err)
 		{
@@ -539,6 +543,10 @@ function checkCollectionEmpty(callback)
 			}
 		}
 	});
+		}
+	},collectionName);
+
+	
 }
 
 exports.checkCollectionEmpty = checkCollectionEmpty;
