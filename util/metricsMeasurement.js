@@ -4,7 +4,7 @@
 
 var common = require("../util/common");
 var db;
-var collectionName = "requests";
+var collectionName = "metricsMeasurement";
 
 function logT1(callback,json){
 	
@@ -19,7 +19,7 @@ function logT1(callback,json){
 			}
 		},collectionName);
 			
-		dbc.insert({'requestId':json.requestId, 't1': json.t1, 't2': "", 'tRes': 0},function (err,result){
+		dbc.insert({'requestId':json.requestId, 't1': json.t1, 't2': "", 'tRes': 0, 'algorithmName': json.algorithmName},function (err,result){
 			
 			if(err){
 				console.log(err);
@@ -101,42 +101,3 @@ function logT2AndResponceTime(json){
 }
 
 exports.logT2AndResponceTime = logT2AndResponceTime;
-
-function calculateTimeAverage(callback,json){
-
-var collName = "servers";
-
-	mongo.getConnection(function(err,coll){
-		if(err){
-			console.log("Error: "+err);
-		}
-		else{
-			dbc = coll;
-		}
-	},collName);
-	
-	var temp = 0;
-	var count++;
-	
-	dbc.find({'tRes' : { $gt : 0 }}, function(err,result){
-		//Aggregate and find average responce time.
-		
-		result.toArray(function(err,docs){
-			
-			if(docs.length!= 0){
-				temp = temp + docs[i].tRes;
-				count++;
-			}
-			
-			
-		});
-		
-		tAvg = temp/count;
-		
-		
-	});
-	
-	callback(err,tAvg);
-}
-
-exports.calculateTimeAverage = calculateTimeAverage;
