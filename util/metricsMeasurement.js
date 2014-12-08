@@ -14,10 +14,8 @@ function logT1(callback,json){
 			}
 			else{
 				dbc = coll;
-			}
-		},collectionName);
-
-		dbc.insert({'requestId':json.requestId, 't1': json.t1, 't2': "", 'tRes': 0, 'algorithmName': json.algorithmName},function (err,result){
+				
+				dbc.insert({'requestId':json.requestId, 't1': json.t1, 't2': "", 'tRes': 0, 'algorithmName': json.algorithmName},function (err,result){
 
 			if(err){
 				console.log(err);
@@ -34,6 +32,9 @@ function logT1(callback,json){
 			}
 
 		});
+		
+			}
+		},collectionName);
 	}
 }
 
@@ -47,10 +48,7 @@ function findRequestDetailsById(callback,requestId){
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-
-	dbc.find({"requestId": requestId},function(err,res){
+			dbc.find({"requestId": requestId},function(err,res){
 
 		if(err){
 			console.log("No Server exists.");
@@ -63,6 +61,8 @@ function findRequestDetailsById(callback,requestId){
 		}
 
 	});
+		}
+	},collectionName);
 }
 
 exports.findRequestDetailsById = findRequestDetailsById;
@@ -77,10 +77,7 @@ function logT2AndResponceTime(json){
 			}
 			else{
 				dbc = coll;
-			}
-		},collectionName);
-
-		dbc.findAndModify({query: {"requestId": json.requestId },update: { $set: { "t2": json.t2 , 'tRes': (json.t2 - json.t1)} }, upsert: true },function(err,result){
+				dbc.findAndModify({query: {"requestId": json.requestId },update: { $set: { "t2": json.t2 , 'tRes': (json.t2 - json.t1)} }, upsert: true },function(err,result){
 
 			if(err){
 				console.log(err);
@@ -91,6 +88,9 @@ function logT2AndResponceTime(json){
 				//db.close();
 			}
 		});
+			}
+		},collectionName);
+		
 	}
 	else{
 		console.log("Insufficient Data.");
