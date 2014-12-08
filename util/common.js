@@ -190,6 +190,157 @@ function findAvailableServersWithResources(callback,conf,quantity){
 
 exports.findAvailableServersWithResources = findAvailableServersWithResources;
 
+function findAvailableServersWithResourceOptimization(callback,conf,quantity,optimizationParameter){
+
+
+	var liveServers = [];
+	var liveReqCount = [];
+	var availableLiveServersString;
+	var flag = 0;
+
+	mongo.getConnection(function(err,coll){
+			if(err){
+				console.log("Error: "+err);
+			}
+			else{
+				dbc = coll;
+			}
+	},collectionName);
+	
+	//query for resource availability when finding all servers.
+
+	if(optimizationParameter == "resource"){
+		
+		dbc.find({'resourceCount': { $gt : quantity } }).sort('resourceCount': -1).limit(3,function(err,result)
+		{
+			if(err)
+			{
+				console.log(err);
+				//closeConnection(db);
+				callback(err,null);
+			}
+
+			//Check server entries in config and match against database results.
+			result.toArray(function(err,docs)
+			{
+				if(err)
+				{
+					console.log(err);
+					//closeConnection(db);
+					callback(err,null);
+				}
+					
+				if(!docs.length==0)
+				{
+					if(conf.server.serverNodes.length!=0)
+					{
+						for(var i=0; i<docs.length; i++)
+						{
+							var temp = docs[i].serverId;
+							for(var j = 0; j < conf.server.serverNodes.length; j++)
+							{
+								if(temp == conf.server.serverNodes[j].nodeId)
+								{
+									flag = 1;
+									//liveServers[i] = conf.server.serverNodes[j].nodeId;
+									//availableLiveServersString = availableLiveServersString + docs[i].serverId + "," + docs[i].liveReq + "#";
+								}
+							}
+							if(flag!= 1)
+							{
+								docs.splice(i,1);
+								flag=0;
+							}
+						}	
+					}
+					else{
+						console.log("No Server Up and Running.");
+						availableLiveServersString = "";
+						//closeConnection(db);
+						callback(new Error("No Server Up and Running."),null);
+					}
+				}
+				else{
+					console.log("No Servers In Database.");
+					availableLiveServersString = "";
+					//closeConnection(db);
+					callback(new Error("No Servers In Database."),null);
+				}
+
+				//closeConnection(db);
+				callback(err,docs);
+			});
+		});
+	}
+	else if(optimizationParameter == "cost"){
+	
+		dbc.find().sort('cost': 1).limit(3,function(err,result)
+		{
+			if(err)
+			{
+				console.log(err);
+				//closeConnection(db);
+				callback(err,null);
+			}
+
+			//Check server entries in config and match against database results.
+			result.toArray(function(err,docs)
+			{
+				if(err)
+				{
+					console.log(err);
+					//closeConnection(db);
+					callback(err,null);
+				}
+					
+				if(!docs.length==0)
+				{
+					if(conf.server.serverNodes.length!=0)
+					{
+						for(var i=0; i<docs.length; i++)
+						{
+							var temp = docs[i].serverId;
+							for(var j = 0; j < conf.server.serverNodes.length; j++)
+							{
+								if(temp == conf.server.serverNodes[j].nodeId)
+								{
+									flag = 1;
+									//liveServers[i] = conf.server.serverNodes[j].nodeId;
+									//availableLiveServersString = availableLiveServersString + docs[i].serverId + "," + docs[i].liveReq + "#";
+								}
+							}
+							if(flag!= 1)
+							{
+								docs.splice(i,1);
+								flag=0;
+							}
+						}	
+					}
+					else{
+						console.log("No Server Up and Running.");
+						availableLiveServersString = "";
+						//closeConnection(db);
+						callback(new Error("No Server Up and Running."),null);
+					}
+				}
+				else{
+					console.log("No Servers In Database.");
+					availableLiveServersString = "";
+					//closeConnection(db);
+					callback(new Error("No Servers In Database."),null);
+				}
+
+				//closeConnection(db);
+				callback(err,docs);
+			});
+		});
+	}
+}
+
+
+exports.findAvailableServersWithResourceOptimization = findAvailableServersWithResourceOptimization;
+
+
 
 function findServerDetailsById(callback,serverId){
 

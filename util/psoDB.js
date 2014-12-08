@@ -104,6 +104,8 @@ exports.logT2 = logT2;
 
 function calculateTimeAverage(callback,json){
 
+var collName = "servers";
+
 	mongo.getConnection(function(err,coll){
 		if(err){
 			console.log("Error: "+err);
@@ -111,7 +113,7 @@ function calculateTimeAverage(callback,json){
 		else{
 			dbc = coll;
 		}
-	},collectionName);
+	},collName);
 	
 	var temp = 0;
 	var count++;
