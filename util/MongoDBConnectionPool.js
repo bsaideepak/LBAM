@@ -12,7 +12,7 @@ var conf = (JSON.parse(fs.readFileSync("./config/conf.json", "utf8")));
 
 
 // Initialize connection once
-MongoClient.connect(conf.mongodbURI, function(err, database) {
+MongoClient.connect("mongodb://localhost:27017/ldb?maxPoolSize=300", function(err, database) {
   if(err){
     console.log("Error Creating MongoDB Connection Pool: "+err);
   }
