@@ -351,7 +351,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 		var distArray = [];
 
 		dbc.find({'resourceCount': { $gt : quantity }}, function(err,result)
-				{
+		{
 			if(err)
 			{
 				console.log(err);
@@ -391,7 +391,14 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 									distArray[i].serverId = docs[i].serverId;
 									distArray[i].distance = dist;
 									distArray[i].serverName = docs[i].serverName;
-
+									distArray[i].liveReq = docs[i].liveReq;
+									distArray[i].resourceCount = docs[i].resourceCount;
+									distArray[i].pheromoneCount = docs[i].pheromoneCount;
+									distArray[i].tAvg = docs[i].tAvg;
+									distArray[i].Cost = docs[i].Cost;
+									distArray[i].latitude = docs[i].latitude;
+									distArray[i].longitude = docs[i].longitude;
+									
 									//liveServers[i] = conf.server.serverNodes[j].nodeId;
 									//availableLiveServersString = availableLiveServersString + docs[i].serverId + "," + docs[i].liveReq + "#";
 								}
@@ -418,9 +425,9 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 				}
 
 				//closeConnection(db);
-				callback(err,docs);
-					});
-				});
+				callback(err,distArray);
+			});
+		});
 	}
 }
 
