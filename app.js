@@ -77,6 +77,7 @@ http.createServer(app).listen(app.get('port'), function(){
 		  {
 		  	if(empty==true)
 		  		{
+		  			commonDB.createWorkerServers(conf);	
 		  			console.log("collection servers empty");
 		  		}
 		  	else
