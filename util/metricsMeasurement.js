@@ -5,6 +5,7 @@
 var common = require("../util/common");
 var db;
 var collectionName = "metricsMeasurement";
+var dbc="hc";
 
 function logT1(callback,json){
 	

@@ -2,7 +2,7 @@ var mongodb = require('mongodb');
 
 var MongoClient = require('mongodb').MongoClient;
 var db;
-
+var dbc="hc";
 // Initialize connection once
 
 MongoClient.connect("mongodb://localhost:27017/bikingDatabase?maxPoolSize=300", function(err, database) {
@@ -311,7 +311,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 	}
 	else if(optimizationParameter == "cost"){
 	
-		dbc.find('resourceCount': { $gt : quantity }).sort({'cost': 1}, function(err,result)
+		dbc.find({'resourceCount': { $gt : quantity }}).sort({'cost': 1}, function(err,result)
 		{
 			if(err)
 			{
@@ -376,7 +376,7 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 		
 		var distArray = [];
 		
-		dbc.find('resourceCount': { $gt : quantity }, function(err,result)
+		dbc.find({'resourceCount': { $gt : quantity }}, function(err,result)
 		{
 			if(err)
 			{

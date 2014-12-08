@@ -4,6 +4,7 @@
 
 var common = require("../util/common");
 var db;
+var dbc="hc";
 
 function getPheromoneCountValue(callback, serverId, quantity){
 

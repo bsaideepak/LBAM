@@ -4,7 +4,7 @@
 
 var common = require("../util/common");
 var db;
-
+var dbc="hc";
 
 function incrementLiveReqCount(serverId){
 
