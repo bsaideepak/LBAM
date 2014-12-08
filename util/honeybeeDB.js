@@ -16,10 +16,7 @@ function incrementLiveReqCount(serverId){
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-
-	dbc.findAndModify({query: {"serverId": serverId },update: { $inc: { "liveReq": 1 } }, upsert: true },function(err,result){
+				dbc.findAndModify({query: {"serverId": serverId },update: { $inc: { "liveReq": 1 } }, upsert: true },function(err,result){
 		if(err){
 			console.log("Error WHile Updating.");
 			//common.closeConnection(db);
@@ -30,6 +27,10 @@ function incrementLiveReqCount(serverId){
 			//common.closeConnection(db);
 		}
 	});
+		}
+	},collectionName);
+
+
 }
 
 exports.incrementLiveReqCount = incrementLiveReqCount;
@@ -42,9 +43,6 @@ function decrementLiveReqCount(serverId){
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-
 	dbc.findAndModify({query: {"serverId": serverId },update: { $inc: { "liveReq": -1 } }, upsert: true },function(err,result){
 
 		if(err){
@@ -56,6 +54,10 @@ function decrementLiveReqCount(serverId){
 			//common.closeConnection(db);
 		}
 	});
+			
+		}
+	},collectionName);
+
 }
 
 exports.decrementLiveReqCount = decrementLiveReqCount;

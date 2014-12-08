@@ -16,10 +16,7 @@ function getPheromoneCountValue(callback, serverId, quantity){
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-			
-	dbc.find({"serverId":serverId},function(err,result){
+				dbc.find({"serverId":serverId},function(err,result){
 
 		if(err){
 			console.log("Error: "+err);
@@ -56,6 +53,10 @@ function getPheromoneCountValue(callback, serverId, quantity){
 			});
 		}
 	});
+		}
+	},collectionName);
+			
+
 }
 
 exports.getPheromoneCountValue = getPheromoneCountValue;
@@ -68,10 +69,7 @@ function changePheromoneCountValue(serverId){
 		}
 		else{
 			dbc = coll;
-		}
-	},collectionName);
-	
-	dbc.findAndModify({query: {"serverId": serverId },update: { $inc: { "pheromoneCount": pheromoneCount } }, upsert: true },function(err,result){
+			dbc.findAndModify({query: {"serverId": serverId },update: { $inc: { "pheromoneCount": pheromoneCount } }, upsert: true },function(err,result){
 
 		if(err){
 			console.log("Error WHile Updating.");
@@ -83,6 +81,10 @@ function changePheromoneCountValue(serverId){
 			//common.closeConnection(db);
 		}
 	});
+		}
+	},collectionName);
+	
+	
 }
 
 exports.changePheromoneCountValue = changePheromoneCountValue;
