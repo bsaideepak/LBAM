@@ -53,7 +53,7 @@ function updateServerDetails(json){
 				//closeConnection(db);
 			}
 			else{
-				var status = "Successfully Inserted";
+				var status = "Successfully Updated";
 				//closeConnection(db);
 				console.log("Operation Successful.");
 				callback(err,status);
@@ -67,6 +67,40 @@ function updateServerDetails(json){
 }
 
 exports.updateServerDetails = updateServerDetails;	
+
+function updateServerResourceCount(serverId,resourceCount){
+
+	if(serverId && resourceCount ){
+
+		mongo.getConnection(function(err,coll){
+			if(err){
+				console.log("Error: "+err);
+			}
+			else{
+				dbc = coll;
+			}
+		},collectionName);
+		
+		dbc.findAndModify({query: {"serverId": serverId },update: { $set: { 'resourceCount':resourceCount } }, upsert: true },function(err,result){
+			if(err){
+				console.log(err);
+				//closeConnection(db);
+			}
+			else{
+				var status = "Successfully Updated";
+				//closeConnection(db);
+				console.log("Operation Successful.");
+				//callback(err,status);
+			}
+		});
+	}
+	else{
+		console.log("Database Collection Error.");
+		//closeConnection(db);
+	}
+}
+
+exports.updateServerResourceCount = updateServerResourceCount;	
 
 function removeServerDetails(json){
 
@@ -190,7 +224,7 @@ function findAvailableServersWithResources(callback,conf,quantity){
 
 exports.findAvailableServersWithResources = findAvailableServersWithResources;
 
-function findAvailableServersWithResourceOptimization(callback,conf,quantity,optimizationParameter){
+function findAvailableServersWithResourceOptimization(callback,conf,quantity,optimizationParameter,lat,lon){
 
 
 	var liveServers = [];
@@ -338,6 +372,82 @@ function findAvailableServersWithResourceOptimization(callback,conf,quantity,opt
 			});
 		});
 	}
+	else if(optimizationParameter == "location"){
+		
+		var distArray = [];
+		
+		dbc.find('resourceCount': { $gt : quantity }, function(err,result)
+		{
+			if(err)
+			{
+				console.log(err);
+				//closeConnection(db);
+				callback(err,null);
+			}
+
+			//Check server entries in config and match against database results.
+			result.toArray(function(err,docs)
+			{
+				if(err)
+				{
+					console.log(err);
+					//closeConnection(db);
+					callback(err,null);
+				}
+					
+				if(!docs.length==0)
+				{
+					if(conf.server.serverNodes.length!=0)
+					{
+						for(var i=0; i<docs.length; i++)
+						{
+							var temp = docs[i].serverId;
+							for(var j = 0; j < conf.server.serverNodes.length; j++)
+							{
+								if(temp == conf.server.serverNodes[j].nodeId)
+								{
+									flag = 1;
+									
+									theta = lon - docs[i].longitude;
+									dist = Math.sin(deg2rad(lat)) * Math.sin(deg2rad(docs[i].latitude)) + Math.cos(deg2rad(lat)) * Math.cos(deg2rad(docs[i].latitude)) * Math.cos(deg2rad(theta));
+									dist = Math.acos(dist);
+									dist = rad2deg(dist);
+									dist = dist * 60 * 1.1515;
+									
+									distArray[i].serverId = docs[i].serverId;
+									distArray[i].distance = dist;
+									distArray[i].serverName = docs[i].serverName;
+									
+									//liveServers[i] = conf.server.serverNodes[j].nodeId;
+									//availableLiveServersString = availableLiveServersString + docs[i].serverId + "," + docs[i].liveReq + "#";
+								}
+							}
+							if(flag!= 1)
+							{
+								docs.splice(i,1);
+								flag=0;
+							}
+						}	
+					}
+					else{
+						console.log("No Server Up and Running.");
+						availableLiveServersString = "";
+						//closeConnection(db);
+						callback(new Error("No Server Up and Running."),null);
+					}
+				}
+				else{
+					console.log("No Servers In Database.");
+					availableLiveServersString = "";
+					//closeConnection(db);
+					callback(new Error("No Servers In Database."),null);
+				}
+
+				//closeConnection(db);
+				callback(err,docs);
+			});
+		});
+	}
 }
 
 
@@ -356,7 +466,7 @@ function findServerDetailsById(callback,serverId){
 			}
 	},collectionName);
 	
-	dbc.find({"serverId":serverId},function(err,res){
+	dbc.find({"serverId":serverId},function(err,result){
 		
 		if(err){
 			console.log("No Server exists.");
@@ -364,7 +474,7 @@ function findServerDetailsById(callback,serverId){
 		}
 		else{
 			//closeConnection(db);
-			callback(err,res);
+			callback(err,result);
 		}
 	});
 }
