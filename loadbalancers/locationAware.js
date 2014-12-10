@@ -4,55 +4,64 @@
 var closestServer=0;
 var shortestDistance=0;
 var db = require("../util/common");
-var algo = require("../loadbalancers/"+loadBal);
 function allocateServer(callback,conf, req)
 {
-	if(req.body.hasOwnProperty('lattitude') && req.body.hasOwnProperty('longitude'))
+	if(req.body.hasOwnProperty('latitude') && req.body.hasOwnProperty('longitude'))
 	{
 		var serverList;
-		db.findAvailableServersWithResources(function (error, servers)
-				{
+		db.findAvailableServersWithResources(function(error, servers)
+		{
 			if(error)
 			{
 				console.log("Error returning the server List: " + error);
-				callback(new Error("No Servers found to handle Requests"), null);
+				callback(new Error("No Servers found to handle Requests because of Database Error"), null);
 			}
 			else if(servers.length==0)
 			{
 				console.log("No active servers available with requested resources");
-				callback(new Error("No Servers found to handle Requests"), null);
+				callback(new Error("No Servers found to handle Requests because server array returned null"), null);
 			}
-				},conf,quantity, req.body.algoOptimization);
-		for(server in serverList)
-		{
-
-			if(shortestDistance==0)
+		var reqlat = parseFloat(req.body.latitude);
+		var reqlon = parseFloat(req.body.longitude);
+		
+			for(server in servers)
 			{
-				distance(req.body.lattitude,req.body.longitude,server.lattitude, server.longitude, function(error, distance){
-					shortestDistance=distance;
-					closestServer=node.nodeId;
-				});
-				
-			}
-			else
-			{
-				distance(req.body.lattitude,req.body.longitude,server.lattitude, server.longitude, function(error,distance)
-					{
-						if(distance<shortestDistance)
-							{
-								shortestDistance=distance;
-								closestServer=server.nodeId;
-							}
+				//console.log("server : " + servers[server].latitude );
+				var servlat = parseFloat(servers[server].latitude);
+				var servlon = parseFloat(servers[server].longitude);
+				if(shortestDistance==0)
+				{
+					getDistanceFromLatLonInKm(reqlat,reqlon,servlat, servlon, function(error, distance){
+						shortestDistance=distance;
+						console.log("Distance : " + distance);
+						closestServer=servers[server].serverId;
 					});
-			}
+					
+				}
+				else
+				{
+					getDistanceFromLatLonInKm(reqlat,reqlon,servlat, servlon, function(error,distance)
+						{
+							if(distance<shortestDistance)
+								{
+									shortestDistance=distance;
+									console.log("Distance :" + distance);
+									closestServer=servers[server].serverId;
+								}
+						});
+				}
 
-		}
-		shortestDistance=0;
-		callback(null, closestServer);
+			}
+			console.log("closest server : " + closestServer)
+			shortestDistance=0;
+			callback(null, closestServer);
+		},conf,req.body.quantity);
+		
 	}
 	else
 	{
-		callback(new Error("No Servers found to handle Requests"), null);
+		console.log(req.body);
+		callback(new Error("No Servers found to handle Requests because of inadequate parameters"), null);
 	}
 
 }
@@ -62,7 +71,7 @@ function performServerTask(conf, req, callback)
 {
 	
 	//decrease server resourceCount
-	db.updateServerResourceCount(conf.nodeId, req.body.quantity);
+	db.updateServerResourceCount(parseInt(conf.nodeId), parseInt(req.body.quantity));
 	console.log("****** Request For Resource recieved with the following Configuration");
 	console.log("** CPU --> " + req.body.CPU  + "**");
 	console.log("** DISK --> " + req.body.disk  + "**");
@@ -75,18 +84,18 @@ function performServerTask(conf, req, callback)
 	
 	db.findServerDetailsById(function(err, server)
 			{
-				if (error)
+				if (err)
 					{
 						console.log("DB nahi chalta, Error from FindServerDetailsbyID : " + error );
 						callback(new Error("Error from FindServerDetailsbyID"), null);
 					}
 				else
 					{
-						var totalCost= server.cost*req.body.quantity();
+						var totalCost= server.cost* parseInt(req.body.quantity);
+						console.log("Total Cost : " + totalCost);
 						callback(null,totalCost);
 					}
-			},
-		conf.nodeId);
+			},parseInt(conf.nodeId));
 	
 }
 exports.performServerTask = performServerTask;
@@ -104,10 +113,17 @@ function distance(lat1, lon1, lat2, lon2, callback)
 	callback(null,dist);
 }
 
-function deg2rad(deg) {
-	return (deg * Math.PI / 180.0);
-}
-function rad2deg(rad) {
-	return (rad * 180.0 / Math.PI);
-}
-
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2, callback) {
+	  var R = 6371; // Radius of the earth in km
+	  var dLat = (lat2-lat1) * Math.PI / 180.0;  // deg2rad below
+	  var dLon = (lon2-lon1) * Math.PI / 180.0; 
+	  var a = 
+	    Math.sin(dLat/2) * Math.sin(dLat/2) +
+	    Math.cos(lat1 * Math.PI / 180.0) * Math.cos(lat2 * Math.PI / 180.0) * 
+	    Math.sin(dLon/2) * Math.sin(dLon/2)
+	    ; 
+	  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	  var d = R * c; // Distance in km
+	  var result= parseFloat(d);
+	  callback(null,d);
+	}

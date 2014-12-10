@@ -18,11 +18,14 @@ exports.resourceRequest = function(req, res){
 	{
 		algo.allocateServer(function(err,allocatedServer){
 			if(err)
+			{
 				console.log(err);
+				return res.send("Error: No servers available to service requests");
+			}
 			else
 			{
 				console.log(req.body);
-				console.log(allocatedServer);
+				//console.log(allocatedServer);
 				for(node in conf.server.serverNodes)
 				{
 					var server=conf.server.serverNodes[node];
@@ -37,7 +40,7 @@ exports.resourceRequest = function(req, res){
 						 *    incase the one allocated is not running
 						 */
 						console.log(url);
-						res.location(url);
+						//res.location(url);
 						return res.redirect(307, url);
 					}
 				}
@@ -59,7 +62,10 @@ exports.resourceRequest = function(req, res){
 				else
 				{
 					if (cost!=null && cost > 0)
-						return res.send("Computed Cost for allocated resources is : "+ cost);
+					{
+							console.log("End to End Working");
+							return res.send("Computed Cost for allocated resources is : "+ cost);
+					}
 					else
 					{
 						console.log("Invalid Cost compouted by Algorithm ");

@@ -8,20 +8,19 @@ var serverPointer=0;
 
 function allocateServer(callback,conf,req)
 {
-	
+
 	common.findAvailableServersWithResources(function(err,docs){
-				
+
 		if(err){
 			console.log("Error.");
 		}
-		
-		else{
 
+		else{
 			if(!docs.length==0)
 			{
 				var no_of_requests = [];
 				var serverId_list = [];
-		
+
 				for(var i=0; i<docs.length;i++)
 				{
 					no_of_requests[i] = docs[i].liveReq;
@@ -38,11 +37,11 @@ function allocateServer(callback,conf,req)
 					else{
 						choice = serverId_list[i];
 					}
-							
+
 				}
 
 				serverPointer = choice;
-								
+
 				callback(null , serverPointer);
 			}
 
@@ -50,11 +49,11 @@ function allocateServer(callback,conf,req)
 				console.log("No servers available to service requests.");
 				callback(null, new Error("No servers available to service requests."));
 			}
-					
+
 		}
-				
+
 	},conf,quantity);
-		
+
 }
 
 
