@@ -17,7 +17,7 @@ var conf = (JSON.parse(fs.readFileSync("./config/conf.json", "utf8")));
 function getConnection(callback,collectionName){
 
 	if(db == null){
-		MongoClient.connect("mongodb://localhost:27017/ldb?maxPoolSize=300", function(err, database) {
+		MongoClient.connect("mongodb://sai:sai@ds063140.mongolab.com:63140/ldb", function(err, database) {
 			if(err){
 				console.log("Error Creating MongoDB Connection Pool: "+err);
 			}
