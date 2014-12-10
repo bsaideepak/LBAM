@@ -125,18 +125,15 @@ function findAvailableServersWithResources(callback,conf,quantity){
 	var availableLiveServersString;
 	var flag = 0;
 
-//	mongo.getConnection(function(err,coll){
-	MongoClient.connect("mongodb://localhost:27017/ldb", function(err, database)
-			{
+	mongo.getConnection(function(err,coll){
+
 		if(err)
 		{
 			console.log("Error: "+err);
 		}
 		else
 		{
-//			dbc = coll;
-			database.collection("servers",function(err,dbc)
-			{
+			dbc = coll;
 				var quant=parseInt(quantity);
 				//console.log("quantity : "+ 100 + " quant : " + quant );
 				dbc.find({'resourceCount' : {$gt : quant}},function(err,result)
@@ -200,15 +197,11 @@ function findAvailableServersWithResources(callback,conf,quantity){
 						//callback(err,docs);
 							});
 						});
-					});
-		}
-			});
+			}
 
 	//query for resource availability when finding all servers.
-
-
+	},collectionName);
 }
-
 
 exports.findAvailableServersWithResources = findAvailableServersWithResources;
 
